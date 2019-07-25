@@ -4,13 +4,21 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+	  – echo Entered the install phase…
+      – apt-get update -y
+      – apt-get install -y software-properties-common
+      – add-apt-repository ppa:openjdk-r/ppa
+      – apt-get update -y
+      – apt-get install -y openjdk-8-jdk
+      – apt-get install -y maven
+	  – $(aws ecr get-login –no-include-email –region $AWS_DEFAULT_REGION)
       - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
-      - mvn clean install
+	  – mvn clean
+      – mvn install
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
@@ -24,3 +32,10 @@ phases:
       - echo Writing image definitions file...
       - printf '[{"name":"springbootapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - cat imagedefinitions.json 
+artifacts:
+files:
+– ‘Dockerrun.aws.json’
+
+Finally, modification to the docker run file to pull the build image from ECR. Note; proper permissions must be configured to authorize the the pull of the image from ECR.
+
+Dockerrun.aws.json
