@@ -5,13 +5,13 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      – echo Entered the install phase…
-      – apt-get update -y
-      – apt-get install -y software-properties-common
-      – add-apt-repository ppa:openjdk-r/ppa
-      – apt-get update -y
-      – apt-get install -y openjdk-8-jdk
-      – apt-get install -y maven
+      - echo Entered the install phase…
+      - apt-get update -y
+      - apt-get install -y software-properties-common
+      - add-apt-repository ppa:openjdk-r/ppa
+      - apt-get update -y
+      - apt-get install -y openjdk-8-jdk
+      - apt-get install -y maven
       -  $(aws ecr get-login --region us-east-1 | sed 's/ \-e none//')
       - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
