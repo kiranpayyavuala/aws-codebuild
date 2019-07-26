@@ -2,13 +2,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      – apt-get update -y
-      – apt-get install -y 
-      – apt-get update -y
-      – apt-get install -y openjdk-8-jdk
-      – apt-get install -y maven
-      – apt install docker.io
-      - docker login -u kiranpayavuala -p kiranPAY1
+      – sudo apt-get update -y
+      – sudo apt-get install -y 
+      – sudo apt-get update -y
+      – sudo apt-get install -y openjdk-8-jdk
+      – sudo apt-get install -y maven
+      – sudo apt install docker.io
+      - sudo docker login -u kiranpayavuala -p kiranPAY1
   build:
     commands:
       – mvn clean
