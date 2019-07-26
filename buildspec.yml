@@ -18,8 +18,8 @@ phases:
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
-      – mvn clean
-      – mvn install
+      - mvn clean
+      - mvn install
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
@@ -35,8 +35,5 @@ phases:
       - cat imagedefinitions.json 
 artifacts:
 files:
-– ‘Dockerrun.aws.json’
-
-Finally, modification to the docker run file to pull the build image from ECR. Note; proper permissions must be configured to authorize the the pull of the image from ECR.
-
+– ‘Dockerrun.aws.json’ Finally, modification to the docker run file to pull the build image from ECR. Note; proper permissions must be configured to authorize the the pull of the image from ECR.
 Dockerrun.aws.json
