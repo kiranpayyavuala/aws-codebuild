@@ -1,22 +1,42 @@
 version: 0.2
+
 phases:
   pre_build:
     commands:
-      – sudo apt-get update -y
-      – sudo apt-get install -y 
-      – sudo apt-get update -y
-      – sudo apt-get install -y openjdk-8-jdk
-      – sudo apt-get install -y maven
-      – sudo apt install docker.io
-      - sudo docker login -u kiranpayavuala -p kiranPAY1
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      – echo Entered the install phase…
+      – apt-get update -y
+      – apt-get install -y software-properties-common
+      – add-apt-repository ppa:openjdk-r/ppa
+      – apt-get update -y
+      – apt-get install -y openjdk-8-jdk
+      – apt-get install -y maven
+      -  $(aws ecr get-login --region us-east-1 | sed 's/ \-e none//')
+      - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       – mvn clean
       – mvn install
+      - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t kiranpayyavuala/myapp:1.11 .
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push kiranpayyavuala/myapp:1.11
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"springbootapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - cat imagedefinitions.json 
+artifacts:
+files:
+– ‘Dockerrun.aws.json’
+
+Finally, modification to the docker run file to pull the build image from ECR. Note; proper permissions must be configured to authorize the the pull of the image from ECR.
+
+Dockerrun.aws.json
