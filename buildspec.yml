@@ -32,8 +32,4 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"springbootapp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json 
-artifacts:
-files:
-– ‘Dockerrun.aws.json’ Finally, modification to the docker run file to pull the build image from ECR. Note; proper permissions must be configured to authorize the the pull of the image from ECR.
-Dockerrun.aws.json
+      - cat imagedefinitions.json
