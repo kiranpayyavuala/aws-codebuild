@@ -7,16 +7,16 @@ phases:
       – apt-get update -y
       – apt-get install -y openjdk-8-jdk
       – apt-get install -y maven
-      – apt  install awscli
-      – $(aws ecr get-login --no-include-email --region us-east-1)
+      – apt install docker.io
+      - docker login -u kiranpayavuala -p kiranPAY1
   build:
     commands:
       – mvn clean
       – mvn install
       - echo Building the Docker image...
-      - docker build -t 719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp:latest .
+      - docker build -t kiranpayyavuala/myapp:1.11 .
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push 719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp:latest
+      - docker push kiranpayyavuala/myapp:1.11
