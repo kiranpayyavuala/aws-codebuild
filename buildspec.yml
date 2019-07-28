@@ -3,19 +3,18 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
       - aws --version
-      - echo Entered the install phase…
-      - apt-get update -y
-      - apt-get install -y software-properties-common
-      - add-apt-repository ppa:openjdk-r/ppa
       - apt-get update -y
       - apt-get install -y openjdk-8-jdk
       - apt-get install -y maven
+      - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --no-include-email | sed 's|https://||')
       - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+  cache:
+    paths:
+     - '/root/.m2/**/*'
   build:
     commands:
       - mvn clean
