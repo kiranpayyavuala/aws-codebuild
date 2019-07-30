@@ -9,7 +9,7 @@ phases:
       - apt-get install -y maven
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --no-include-email | sed 's|https://||')
-      - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp
+      - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springboot-app
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
