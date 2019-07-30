@@ -12,7 +12,7 @@ phases:
       - apt-get update -y
       - apt-get install -y openjdk-8-jdk
       - apt-get install -y maven
-      - apt-get install docker.io
+      - apt-get install -y docker.io
       - systemctl start docker
       -  $(aws ecr get-login --region us-east-1 | sed 's/ \-e none//')
       - REPOSITORY_URI=719615471860.dkr.ecr.us-east-1.amazonaws.com/springbootapp
